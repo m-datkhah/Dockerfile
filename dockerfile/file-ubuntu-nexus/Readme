@@ -1,0 +1,67 @@
+Notes:
+1.
+Your Dockerfile should do the following:
+
+1-Choose a Linux base image.
+
+2-Install Java.
+
+3-Download and extract Nexus.
+
+4-Create a user and data directory.
+
+5-Expose port 8081.
+
+6-Run Nexus with the nexus run command.
+
+
+2.
+In both the shell and a Dockerfile, spaces separate arguments:
+
+bash
+mkdir -p /opt/nexus /nexus-data
+Therefore, this command creates two separate directories:
+
+text
+/opt/nexus
+/nexus-data
+mkdir can create multiple directories at the same time:
+
+bash
+mkdir -p dir1 dir2 dir3
+So it creates three directories.
+
+3.
+The options in this command:
+
+bash
+groupadd -r nexus
+useradd -r -g nexus -s /bin/false nexus
+mean the following:
+
+-r: creates a system account for a service, not for a human user. For Nexus, this is the correct and more secure choice.
+
+-s /bin/false: disables the shell for this user.
+
+-d /opt/nexus: sets /opt/nexus as the user’s home directory for the service.
+
+-g nexus: sets nexus as the user’s primary group.
+
+4.
+I encountered the following error:
+cannot create directory '../sonatype-work': Permission denied
+This error means that the nexus user does not have permission to create the sonatype-work directory, or the directory already exists but is not owned by the nexus user.
+
+The key lines are:
+mkdir -p /opt/nexus /opt/sonatype-work
+chown -R nexus:nexus /opt/nexus /opt/sonatype-work
+The official Dockerfile performs the same steps: it creates the Sonatype work directory, assigns ownership to the nexus user, moves nexus3 to /nexus-data, and creates a symbolic link.
+
+The following line is also important:
+
+ENV SONATYPE_WORK=/opt/sonatype-work
+Nexus uses this environment variable to determine the work-directory path. If it is not set, Nexus falls back to the default relative path ../sonatype-work, which may again cause a permission error.
+
+5.
+
+ Download the Nexus archive manually and place it next to the Dockerfile. The archive is copied to /tmp, extracted to /opt, and then removed from /tmp after extraction.
