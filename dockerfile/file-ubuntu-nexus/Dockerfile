@@ -1,5 +1,8 @@
 FROM ubuntu:latest
 
+MAINTAINER mohammad Dadkhah <m.datkhah@gmail.com>
+
+
 RUN apt update && \
 apt upgrade -y && \
 apt install -y  openjdk-8-jre-headless \
