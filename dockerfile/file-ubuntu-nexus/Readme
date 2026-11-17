@@ -103,6 +103,12 @@ mean the following:
 
 -g nexus: sets nexus as the user’s primary group.
 
+4.
+Find the Package That Provides a Command Using apt-file search
+apt install apt-file
+apt-file update
+apt-file search bin/tail
+
 
 ## ⚠️ Errors and Solutions
 1.
