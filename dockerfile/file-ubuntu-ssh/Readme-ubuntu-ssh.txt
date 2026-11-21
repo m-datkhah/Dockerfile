@@ -39,7 +39,7 @@ docker run -d \
 
 ```text
 project/
-├── Dockerfile/
+├── Dockerfile
 ├── sshd-hardening.conf
 └── README.md
 ```
